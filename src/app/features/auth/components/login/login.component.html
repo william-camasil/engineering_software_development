@@ -1,0 +1,28 @@
+<div class="login-container">
+  <div class="header">
+    <img src="assets/logo.png" alt="TaskFlow Logo" class="logo" />
+    <h1>TaskFlow</h1>
+  </div>
+  <div class="login-form">
+    <div class="input-container">
+      <label for="username">Usuário</label>
+      <input type="text" id="username" placeholder="Usuário" />
+    </div>
+    <div class="input-container">
+      <label for="password">Senha</label>
+      <input type="password" id="password" placeholder="Senha" />
+    </div>
+    <button class="access-button" (click)="navigateToDashboard()">
+      Acessar
+    </button>
+    <div class="signup-link" (click)="navigateToRegisterNewAccount()">
+      <a href="#">Cadastrar novo usuário</a>
+    </div>
+    <div class="google-signin">
+      <button class="google-button">
+        <img src="assets/google-icon.png" alt="Google" class="google-icon" />
+        Acesse com uma conta google
+      </button>
+    </div>
+  </div>
+</div>
