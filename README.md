@@ -1,4 +1,16 @@
-# NomeDoProjeto
+## Tarefas
+
+- [] desenvolver o layout e css das telas
+- [] ajustar as navegações
+- [] criar uma tela de erro de navegação
+- [] adicionar firebase para gerir login com rede social e cadastro
+- [] adicionar mock do serviço para obter informações do usuário, em relação as tarefas 
+- [] desenvolver os testes unitários
+- [] criar a pipeline
+- [] criar ambientes de dev, hmg e main 
+
+
+## NomeDoProjeto
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
 

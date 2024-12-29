@@ -1,0 +1,129 @@
+/*
+  POST - Criação do usuário
+  Essa api irá ser executada assim que for criado o usuário na tela de cadastro
+*/
+> payload
+{
+  "user": "string", // ex.: William
+  "token":"number", // ex.: token do firebase
+  "cpf": "number" // ex.: 14526358745
+}
+> response
+{
+  "status": "number", // ex.: 400
+  "message": "string", // ex.: sucesso
+}
+
+---------------------------------
+
+/*
+  GET - Ao fazer login
+  Essa api irá ser executada assim que for feito o login
+*/
+> payload
+{
+  "cpf": "number", // ex.: William
+}
+> response
+{
+  "status": "number", // ex.: 400
+  "message": "string", // ex.: sucesso
+  "token": "number", // ex.: token do firebase
+  "user": "string", // ex.: William
+}
+
+// OBS.: esse token servirá para autenticar as chamadas após ser logado
+
+
+---------------------------------
+
+/*
+  GET - dashboard, area logada
+  Essa api irá ser executada assim que for feito acesso a dashboard a qual retornara as tarefas do usuário
+*/
+> payload
+{
+  "token":"number", // ex.: token do firebase
+}
+> response
+{
+  "status": "number", // ex.: 400
+  "message": "string", // ex.: sucesso
+  "qtdTasks": "number",
+  "qtdTasksFineshed": "number",
+  "tasks": [
+    {
+      "id": "number",
+      "fineshed": "boolean",
+      "description": "string",
+    }
+  ]
+}
+
+---------------------------------
+
+/*
+  POST - dashboard, area logada
+  Essa api irá ser executada quando for criado uma nova task
+*/
+> payload
+{
+  "token":"number", // ex.: token do firebase
+  "tasks": {
+    // esse ID irá ser controlado pelo backend, vou enviar somente as 2 props abaixo
+    // assim como a qtdTasks e qtdTasksFineshed controladas pelo back
+    "id": "number",
+    "fineshed": "boolean",
+    "description": "string",
+  }
+
+}
+> response
+{
+  "status": "number", // ex.: 400
+  "message": "string", // ex.: sucesso
+}
+
+---------------------------------
+
+/*
+  PUT - dashboard, area logada
+  Essa api irá ser executada quando for editado uma task
+*/
+> payload
+{
+  "token":"number", // ex.: token do firebase
+  "tasks": {
+    "id": "number",
+    "fineshed": "boolean",
+    "description": "string",
+  }
+
+}
+> response
+{
+  "status": "number", // ex.: 400
+  "message": "string", // ex.: sucesso
+}
+
+---------------------------------
+
+/*
+  DELETE - dashboard, area logada
+  Essa api irá ser executada quando for excluir uma task
+*/
+> payload
+{
+  "token":"number", // ex.: token do firebase
+  "tasks": {
+    "id": "number",
+    "fineshed": "boolean",
+    "description": "string",
+  }
+
+}
+> response
+{
+  "status": "number", // ex.: 400
+  "message": "string", // ex.: sucesso
+}
