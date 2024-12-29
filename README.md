@@ -4,7 +4,8 @@
 - [] ajustar as navegações
 - [] criar uma tela de erro de navegação
 - [] adicionar firebase para gerir login com rede social e cadastro
-- [] adicionar mock do serviço para obter informações do usuário, em relação as tarefas 
+- [] adicionar mock do serviço para obter informações do usuário, em relação as tarefas
+- [] implementar serviços reais
 - [] desenvolver os testes unitários
 - [] criar a pipeline
 - [] criar ambientes de dev, hmg e main 
