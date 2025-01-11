@@ -1,68 +1,87 @@
-// import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import LoginPage from "./page";
-// import { login } from "./services/authService";
-// import { useRouter } from "next/navigation";
+import { login } from "./services/authService";
+import { useRouter } from "next/navigation";
 
-// Mockar as funções externas
 jest.mock("./services/authService");
 jest.mock("next/navigation");
 
-describe("LoginPage", () => {
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+  usePathname: jest.fn(),
+}));
+
+describe("Login", () => {
   it("renders Login form", () => {
     render(<LoginPage />);
 
-    // Verificar se os elementos da tela estão presentes
     screen.getByPlaceholderText("Digite seu e-mail");
     screen.getByPlaceholderText("Digite sua senha");
     screen.getByText("Acessar");
   });
 
-  // it("handles login successfully and redirects", async () => {
-  //   // Mockar o comportamento da função login
-  //   login.mockResolvedValueOnce({ success: true });
+  it("calls login function on submit with correct credentials", async () => {
+    render(<LoginPage />);
 
-  //   // Mockar o redirecionamento
-  //   const pushMock = jest.fn();
-  //   useRouter.mockReturnValue({ push: pushMock });
+    const mockPush = jest.fn();
+    useRouter.mockReturnValue({ push: mockPush });
 
-  //   render(<LoginPage />);
+    const emailInput = screen.getByPlaceholderText("Digite seu e-mail");
+    const passwordInput = screen.getByPlaceholderText("Digite sua senha");
+    const loginButton = screen.getByText("Acessar");
 
-  //   // Preencher o formulário
-  //   fireEvent.change(screen.getByPlaceholderText("Username"), {
-  //     target: { value: "user" },
-  //   });
-  //   fireEvent.change(screen.getByPlaceholderText("Password"), {
-  //     target: { value: "password" },
-  //   });
+    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(passwordInput, { target: { value: "password123" } });
 
-  //   // Clicar no botão de login
-  //   fireEvent.click(screen.getByText("Entrar"));
+    login.mockResolvedValueOnce({ email: "test@example.com" });
 
-  //   // Esperar o redirecionamento
-  //   await waitFor(() => expect(pushMock).toHaveBeenCalledWith("/dashboard"));
-  // });
+    fireEvent.click(loginButton);
 
-  // it("handles login failure and shows error", async () => {
-  //   // Mockar o erro da função login
-  //   login.mockRejectedValueOnce(new Error("Login failed"));
+    // Esperar a navegação para o dashboard após o login
+    await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/dashboard"));
+  });
 
-  //   render(<LoginPage />);
+  it("shows error message when login fails", async () => {
+    // Mock da função alert
+    window.alert = jest.fn();
 
-  //   // Preencher o formulário com dados incorretos
-  //   fireEvent.change(screen.getByPlaceholderText("Username"), {
-  //     target: { value: "user" },
-  //   });
-  //   fireEvent.change(screen.getByPlaceholderText("Password"), {
-  //     target: { value: "wrongpassword" },
-  //   });
+    render(<LoginPage />);
 
-  //   // Clicar no botão de login
-  //   fireEvent.click(screen.getByText("Entrar"));
+    const emailInput = screen.getByPlaceholderText("Digite seu e-mail");
+    const passwordInput = screen.getByPlaceholderText("Digite sua senha");
+    const loginButton = screen.getByText("Acessar");
 
-  //   // Esperar que o erro seja mostrado
-  //   await waitFor(() =>
-  //     expect(window.alert).toHaveBeenCalledWith("Erro ao fazer login. Tente novamente.")
-  //   );
-  // });
+    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
+
+    // Simular erro no login
+    login.mockRejectedValueOnce(new Error("Credenciais inválidas"));
+
+    fireEvent.click(loginButton);
+
+    // Verificar se o alert foi chamado com a mensagem de erro
+    await waitFor(() =>
+      expect(window.alert).toHaveBeenCalledWith(
+        expect.stringContaining("Erro ao fazer login. Tente novamente.")
+      )
+    );
+  });
+
+  it("navigates to the register page when 'Cadastrar novo usuário' is clicked", () => {
+    // Mock da função push
+    const mockPush = jest.fn();
+    useRouter.mockReturnValue({ push: mockPush });
+
+    // Mock do usePathname para evitar o erro de undefined
+    require("next/navigation").usePathname.mockReturnValue("/");
+
+    render(<LoginPage />);
+
+    const registerButton = screen.getByText("Cadastrar novo usuário");
+
+    fireEvent.click(registerButton);
+
+    // Verificar se a navegação foi para a página de registro
+    expect(mockPush).toHaveBeenCalledWith("/register");
+  });
 });

@@ -1,25 +1,62 @@
 "use client";
 
+import { useState } from "react";
+import { register } from "../services/authService";
+import styles from "./register.module.css";
 import { useRouter } from "next/navigation";
+import Header from "../components/header";
 
 const RegisterPage = () => {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleRegister = () => {
-    // Processo de registro
-    router.push("/login");
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await register(email, password, confirmPassword);
+      router.push("/");
+    } catch (error) {
+      alert(`Erro ao registrar. Tente novamente. ${error}`);
+    }
   };
 
   return (
-    <div>
-      <h1>Registro</h1>
-      <form>
-        {/* Adicione seu formulário de registro aqui */}
-        <button onClick={handleRegister}>Registrar</button>
-        <button type="button" onClick={() => router.push("/login")}>
-          Voltar para Login
-        </button>
-      </form>
+    <div className={styles.container}>
+      <Header />
+      <div className={styles.formContainer}>
+        <form className={styles.form} onSubmit={handleRegister}>
+          <input
+            type="email"
+            placeholder="Digite seu e-mail"
+            className={styles.input}
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Digite sua senha"
+            className={styles.input}
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Repita a senha"
+            className={styles.input}
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+
+          <button type="submit" className={styles.loginButton}>
+            Cadastrar
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

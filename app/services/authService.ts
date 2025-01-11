@@ -2,41 +2,54 @@
 
 import axios from "axios";
 
-const API_URL = "https://burgerlivery-api.vercel.app"; // URL da sua API
+const API_URL = "http://localhost:5000";
 
-// Função de login
-export const login = async (username: string, password: string) => {
+// Função para fazer login
+export const login = async (email: string, password: string) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, {
-      username,
-      password,
-    });
-    return response.data; // Retorna os dados recebidos da API
+    // Envia a requisição para a API de usuários filtrando pelo email
+    const response = await axios.get(`${API_URL}/users?email=${email}`);
+
+    // Verifica se o usuário existe e se a senha corresponde
+    const user = response.data.find(
+      (user: { email: string; password: string }) =>
+        user.email === email && user.password === password
+    );
+
+    if (!user) {
+      throw new Error("Credenciais inválidas");
+    }
+
+    return user;
   } catch (error) {
     console.error("Erro ao fazer login:", error);
     throw error;
   }
 };
 
-// Função de registro
-export const register = async (username: string, password: string) => {
+// Função para registrar um novo usuário
+export const register = async (
+  email: string,
+  password: string,
+  confirmPassword: string
+) => {
   try {
-    const response = await axios.post(`${API_URL}/register`, {
-      username,
-      password,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Erro ao registrar:", error);
-    throw error;
-  }
-};
+    // Verifica se as senhas coincidem
+    if (password !== confirmPassword) {
+      throw new Error("As senhas não coincidem");
+    }
 
-// FUNCIONOU A CHAMADA
-export const obtain = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/categories`);
-    return response.data;
+    // Verifica se o email já está cadastrado
+    const response = await axios.get(`${API_URL}/users?email=${email}`);
+    if (response.data.length > 0) {
+      throw new Error("Este email já está cadastrado");
+    }
+
+    // Cria um novo usuário
+    const newUser = { email, password };
+    const userResponse = await axios.post(`${API_URL}/users`, newUser);
+
+    return userResponse.data;
   } catch (error) {
     console.error("Erro ao registrar:", error);
     throw error;

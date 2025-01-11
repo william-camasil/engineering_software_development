@@ -9,5 +9,6 @@ module.exports = {
   testPathIgnorePatterns: ["/node_modules/", "/.next/"],
   moduleNameMapper: {
     "\\.css$": "identity-obj-proxy",
-  },
+    "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/app/__mocks__/fileMock.js", // Caminho correto para o mock
+  },  
 };

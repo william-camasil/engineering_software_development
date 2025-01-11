@@ -1,0 +1,35 @@
+.logoContainer {
+  background-color: #868686;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 20%;
+}
+
+.logoTextContainer {
+  display: flex;
+  align-items: center;
+}
+
+.logoText {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.logoutButton,
+.loginButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.logoutButton:hover,
+.loginButton:hover {
+  background-color: #0056b3;
+}
