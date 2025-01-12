@@ -1,54 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Projeto de Criação de Tarefa
 
-## Tarefas
+Este projeto foi criado para demonstrar a criação de tarefas utilizando Next.js, com funcionalidades para rodar o projeto localmente, rodar os testes e garantir a qualidade do código com o lint.
 
-- [] desenvolver o layout e css das telas
-- [] ajustar as navegações
-- [] criar uma tela de erro de navegação
-- [] adicionar firebase para gerir login com rede social e cadastro
-- [] adicionar mock do serviço para obter informações do usuário, em relação as tarefas
-- [] implementar serviços reais
-- [] desenvolver os testes unitários
-- [] criar a pipeline
-- [] criar ambientes de dev, hmg e main
+## Como Rodar o Projeto
 
-## Getting Started
+### 1. Instalar as Dependências
 
-First, run the development server:
+Primeiramente, instale as dependências do projeto executando o seguinte comando no terminal:
+
+```bash
+npm install
+```
+
+### 2. Rodar o Projeto
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Após rodar o comando acima, abra o link exibido no terminal para acessar o projeto no navegador:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Rodar os Testes
 
-## Learn More
+```bash
+npm test
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Rodar o Lint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-
-## Para rodar o json-server:
-Integrado com a dashboard
-npm run server
-
+```bash
+npm run lint
+```
