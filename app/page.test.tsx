@@ -38,12 +38,10 @@ describe("Login", () => {
 
     fireEvent.click(loginButton);
 
-    // Esperar a navegação para o dashboard após o login
     await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/dashboard"));
   });
 
   it("shows error message when login fails", async () => {
-    // Mock da função alert
     window.alert = jest.fn();
 
     render(<LoginPage />);
@@ -55,12 +53,10 @@ describe("Login", () => {
     fireEvent.change(emailInput, { target: { value: "test@example.com" } });
     fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
 
-    // Simular erro no login
     login.mockRejectedValueOnce(new Error("Credenciais inválidas"));
 
     fireEvent.click(loginButton);
 
-    // Verificar se o alert foi chamado com a mensagem de erro
     await waitFor(() =>
       expect(window.alert).toHaveBeenCalledWith(
         expect.stringContaining("Erro ao fazer login. Tente novamente.")
@@ -69,11 +65,9 @@ describe("Login", () => {
   });
 
   it("navigates to the register page when 'Cadastrar novo usuário' is clicked", () => {
-    // Mock da função push
     const mockPush = jest.fn();
     useRouter.mockReturnValue({ push: mockPush });
 
-    // Mock do usePathname para evitar o erro de undefined
     usePathname.mockReturnValue("/");
 
     render(<LoginPage />);
@@ -82,7 +76,6 @@ describe("Login", () => {
 
     fireEvent.click(registerButton);
 
-    // Verificar se a navegação foi para a página de registro
     expect(mockPush).toHaveBeenCalledWith("/register");
   });
 });

@@ -2,7 +2,6 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import DashboardPage from "./page";
 import * as tasksService from "../services/tasksService";
 
-// Mock da função `obtainTasks` para não fazer requisição real à API
 jest.mock("../services/tasksService");
 
 jest.mock("../services/authService");
@@ -36,7 +35,6 @@ describe("DashboardPage", () => {
   ];
 
   beforeEach(() => {
-    // Resetando o mock antes de cada teste
     (tasksService.obtainTasks as jest.Mock).mockReset();
     (tasksService.createTask as jest.Mock).mockReset();
     (tasksService.editTask as jest.Mock).mockReset();
@@ -45,17 +43,13 @@ describe("DashboardPage", () => {
   });
 
   it("exibe as tarefas corretamente após a requisição bem-sucedida", async () => {
-    // Mock da função `obtainTasks` para retornar os dados mockados
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockData);
 
-    // Renderiza o componente
     render(<DashboardPage />);
 
-    // Verifica se as tarefas são exibidas na tela
     await waitFor(() => screen.getByText("Task 1"));
     await waitFor(() => screen.getByText("Task 2"));
 
-    // Verifica se as tarefas estão na lista
     screen.getByText("Task 1");
     screen.getByText("Task 2");
   });
@@ -85,19 +79,15 @@ describe("DashboardPage", () => {
       user_id: 1,
     });
 
-    // Renderiza o componente
     render(<DashboardPage />);
 
-    // Simula a adição de uma nova tarefa
     const input = screen.getByPlaceholderText("Adicione uma nova tarefa");
     fireEvent.change(input, { target: { value: "New Task" } });
     const button = screen.getByText("Criar");
     fireEvent.click(button);
 
-    // Espera pela tarefa ser adicionada
     await waitFor(() => screen.getByText("New Task"));
 
-    // Verifica se a nova tarefa está na lista
     screen.getByText("New Task");
   });
 
@@ -115,10 +105,8 @@ describe("DashboardPage", () => {
       },
     ];
 
-    // Mock da função obtainTasks para retornar tarefas existentes
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
 
-    // Mock da função editTask para retornar uma tarefa editada
     (tasksService.editTask as jest.Mock).mockResolvedValue({
       id: 1,
       title: "Edited Task",
@@ -130,13 +118,10 @@ describe("DashboardPage", () => {
       user_id: 1,
     });
 
-    // Renderiza o componente
     render(<DashboardPage />);
 
-    // Espera que a tarefa seja carregada na tela
     await waitFor(() => screen.getByText("Task 1"));
 
-    // Simula a edição da tarefa
     const editButton = screen.getByTestId("editButton");
     fireEvent.click(editButton);
 
@@ -146,10 +131,8 @@ describe("DashboardPage", () => {
     const saveButton = screen.getByText("Salvar");
     fireEvent.click(saveButton);
 
-    // Espera pela tarefa ser editada
     await waitFor(() => screen.getByText("Edited Task"));
 
-    // Verifica se a tarefa editada está na lista
     screen.getByText("Edited Task");
   });
 
@@ -167,10 +150,8 @@ describe("DashboardPage", () => {
       },
     ];
 
-    // Mock da função obtainTasks para retornar tarefas existentes
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
 
-    // Mock da função editTaskStatus para marcar a tarefa como concluída
     (tasksService.editTaskStatus as jest.Mock).mockResolvedValue({
       id: 1,
       title: "Task 1",
@@ -182,20 +163,15 @@ describe("DashboardPage", () => {
       user_id: 1,
     });
 
-    // Renderiza o componente
     render(<DashboardPage />);
 
-    // Espera que a tarefa seja carregada na tela
     await waitFor(() => screen.getByText("Task 1"));
 
-    // Simula marcar a tarefa como concluída (checkbox)
     const checkbox = screen.getByRole("checkbox");
     fireEvent.click(checkbox);
 
-    // Espera pela tarefa ser marcada como concluída
     await waitFor(() => screen.getByText("Task 1"));
 
-    // Verifica se a tarefa foi concluída
     expect(screen.getByText("Task 1")).toBeInTheDocument();
   });
 
@@ -215,20 +191,15 @@ describe("DashboardPage", () => {
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
     (tasksService.deleteTask as jest.Mock).mockResolvedValue(undefined);
 
-    // Renderiza o componente
     render(<DashboardPage />);
 
-    // Espera que a tarefa seja carregada na tela
     await waitFor(() => screen.getByText("Task 1"));
 
-    // Verifica se o botão de excluir está presente
     const deleteButton = screen.getByTestId("excluirButton");
-    expect(deleteButton).toBeInTheDocument(); // Assegura que o botão de exclusão foi renderizado
+    expect(deleteButton).toBeInTheDocument();
 
-    // Simula a exclusão de uma tarefa
     fireEvent.click(deleteButton);
 
-    // Espera a tarefa ser removida da lista
     await waitFor(() => expect(screen.queryByText("Task 1")).toBeNull());
   });
 
@@ -250,31 +221,25 @@ describe("DashboardPage", () => {
       new Error("Erro ao criar tarefa")
     );
 
-    // Renderiza o componente
     render(<DashboardPage />);
 
-    // Simula a criação de uma nova tarefa
     const input = screen.getByPlaceholderText("Adicione uma nova tarefa");
     fireEvent.change(input, { target: { value: "New Task" } });
     const button = screen.getByText("Criar");
     fireEvent.click(button);
 
-    // Verifica se a mensagem de erro é exibida
     await waitFor(() =>
       screen.getByText("Erro ao criar tarefa. Error: Erro ao criar tarefa")
     );
   });
 
   it("exibe a mensagem de erro caso a requisição falhe", async () => {
-    // Mock da função `obtainTasks` para lançar um erro
     (tasksService.obtainTasks as jest.Mock).mockRejectedValue(
       new Error("Erro ao carregar os dados")
     );
 
-    // Renderiza o componente
     render(<DashboardPage />);
 
-    // Verifica se o estado de erro é exibido
     await waitFor(() =>
       screen.getByText(
         "Erro ao carregar os dados. Tente novamente. Error: Erro ao carregar os dados"
@@ -283,26 +248,20 @@ describe("DashboardPage", () => {
   });
 
   it("exibe a mensagem de carregamento enquanto a requisição está em andamento", () => {
-    // Mock da função `obtainTasks` que retorna uma promise (simulando requisição)
     (tasksService.obtainTasks as jest.Mock).mockReturnValue(
       new Promise(() => {})
     );
 
-    // Renderiza o componente
     render(<DashboardPage />);
 
-    // Verifica se o estado de carregamento é exibido
     screen.getByText("Carregando...");
   });
 
   it("exibe a mensagem 'Você ainda não tem tarefas cadastradas' se não houver dados", async () => {
-    // Mock da função `obtainTasks` para retornar um array vazio
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue([]);
 
-    // Renderiza o componente
     render(<DashboardPage />);
 
-    // Verifica se a mensagem 'Você ainda não tem tarefas cadastradas' é exibida
     await waitFor(() =>
       screen.getByText("Você ainda não tem tarefas cadastradas")
     );

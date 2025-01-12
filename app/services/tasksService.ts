@@ -15,41 +15,37 @@ export type TasksDataResponseType = {
   updated_at: string;
 };
 
-// Obter as tarefas
 export const obtainTasks = async (): Promise<TasksDataResponseType[]> => {
   try {
     const response = await axios.get(`${API_URL}/tasks`);
     console.log("response: ", response.data);
-    return response.data; // Ajustado para corresponder ao formato do retorno
+    return response.data;
   } catch (error) {
     console.error("Erro ao registrar:", error);
     throw new Error("Erro ao obter dados da API");
   }
 };
 
-// Criar uma nova tarefa
 export const createTask = async (
   title: string,
   description: string,
-  id: number // Recebe o ID como parâmetro
+  id: number
 ): Promise<TasksDataResponseType> => {
   try {
-    // Chama a API para criar a tarefa, agora com o ID passado
     const response = await axios.post(`${API_URL}/tasks`, {
-      id, // Passa o ID gerado no frontend
+      id,
       title,
       description,
-      status_id: 1, // status_id 1 significa "não concluída"
+      status_id: 1,
     });
     console.log("Tarefa criada: ", response.data);
-    return response.data; // Retorna a tarefa criada com o ID correto
+    return response.data;
   } catch (error) {
     console.error("Erro ao criar tarefa:", error);
     throw new Error("Erro ao criar tarefa");
   }
 };
 
-// Editar uma tarefa existente
 export const editTask = async (
   id: number,
   title: string,
@@ -61,14 +57,13 @@ export const editTask = async (
       description,
     });
     console.log("Tarefa editada: ", response.data);
-    return response.data; // Retorna a tarefa atualizada
+    return response.data;
   } catch (error) {
     console.error("Erro ao editar tarefa:", error);
     throw new Error("Erro ao editar tarefa");
   }
 };
 
-// Atualizar o status de uma tarefa
 export const editTaskStatus = async (
   id: number,
   status_id: number
@@ -85,7 +80,6 @@ export const editTaskStatus = async (
   }
 };
 
-// Deletar uma tarefa
 export const deleteTask = async (id: number): Promise<void> => {
   try {
     await axios.delete(`${API_URL}/tasks/${id}`);

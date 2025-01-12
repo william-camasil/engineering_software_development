@@ -1,19 +1,19 @@
 import Image from "next/image";
 import logo from "../assets/images/logo/logo.png";
 import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation"; // Para pegar o pathname atual
+import { usePathname } from "next/navigation";
 import styles from "./header.module.css";
 
 const Header = () => {
   const router = useRouter();
-  const pathname = usePathname(); // Obtém a URL atual
+  const pathname = usePathname();
 
   const handleLogout = () => {
-    router.push("/"); // Navega para a página de login
+    router.push("/");
   };
 
   const handleGoToLogin = () => {
-    router.push("/"); // Navega para a página de login
+    router.push("/");
   };
 
   return (
@@ -23,14 +23,12 @@ const Header = () => {
         <p className={styles.logoText}>TaskFlow</p>
       </div>
 
-      {/* Exibe o botão de Logout apenas no Dashboard */}
       {pathname === "/dashboard" && (
         <button className={styles.logoutButton} onClick={handleLogout}>
           Sair
         </button>
       )}
 
-      {/* Exibe o botão de Login apenas no Register */}
       {pathname === "/register" && (
         <button className={styles.loginButton} onClick={handleGoToLogin}>
           Ir para Login

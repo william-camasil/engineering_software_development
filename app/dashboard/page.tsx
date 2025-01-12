@@ -80,11 +80,10 @@ const DashboardPage = () => {
 
     try {
       const taskId = tasks[index].id;
-      const updatedTask = await editTaskStatus(
+      await editTaskStatus(
         taskId,
         updatedTasks[index].status_id
       );
-      console.log("Tarefa atualizada:", updatedTask);
     } catch (error) {
       setError(`Erro ao atualizar o status da tarefa. ${error}`);
     }
@@ -93,7 +92,6 @@ const DashboardPage = () => {
   const handleDeleteTask = async (index: number) => {
     try {
       const taskId = tasks[index].id;
-      console.log(`taskID: ${taskId}`);
       await deleteTask(taskId);
 
       const updatedTasks = [...tasks];
@@ -206,7 +204,7 @@ const DashboardPage = () => {
                   >
                     <input
                       type="checkbox"
-                      role="checkbox" // Aqui indicamos explicitamente que é um checkbox
+                      role="checkbox"
                       checked={completedTasks[index]}
                       onChange={() => {}}
                     />
@@ -225,7 +223,7 @@ const DashboardPage = () => {
                   </button>
                   <button
                     onClick={() => handleDeleteTask(index)}
-                    data-testid="excluirButton" // Garantir que o botão tem o data-testid correto
+                    data-testid="excluirButton"
                   >
                     <Image
                       src={deleteItem}
