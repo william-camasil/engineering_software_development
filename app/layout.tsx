@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Engineering Software Development",
+  title: "TaskFlow",
   description: "Aplicação para gerenciar login, registro e dashboard.",
 };
 
