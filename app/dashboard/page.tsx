@@ -41,7 +41,7 @@ const DashboardPage = () => {
       );
       setCompletedTasks(updatedCompletedTasks);
     } catch (error) {
-      setError(`Erro ao carregar os dados. Tente novamente.`);
+      setError(`Erro ao carregar os dados. Tente novamente. ${error}`);
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ const DashboardPage = () => {
         ]);
         setNewTask("");
       } catch (error) {
-        setError("Erro ao criar tarefa.");
+        setError(`Erro ao criar tarefa. ${error}`);
       }
     }
   };
@@ -86,7 +86,7 @@ const DashboardPage = () => {
       );
       console.log("Tarefa atualizada:", updatedTask);
     } catch (error) {
-      setError("Erro ao atualizar o status da tarefa.");
+      setError(`Erro ao atualizar o status da tarefa. ${error}`);
     }
   };
 
@@ -104,7 +104,7 @@ const DashboardPage = () => {
       updatedCompletedTasks.splice(index, 1);
       setCompletedTasks(updatedCompletedTasks);
     } catch (error) {
-      setError("Erro ao excluir tarefa.");
+      setError(`Erro ao excluir tarefa. ${error}`);
     }
   };
 
@@ -127,7 +127,7 @@ const DashboardPage = () => {
         setNewTask("");
         setEditingTaskIndex(null);
       } catch (error) {
-        setError("Erro ao editar tarefa.");
+        setError(`Erro ao editar tarefa. ${error}`);
       }
     }
   };
@@ -204,6 +204,12 @@ const DashboardPage = () => {
                     }`}
                     onClick={() => handleCompleteTask(index)}
                   >
+                    <input
+                      type="checkbox"
+                      role="checkbox" // Aqui indicamos explicitamente que é um checkbox
+                      checked={completedTasks[index]}
+                      onChange={() => {}}
+                    />
                     <div className={styles.circle}>
                       {completedTasks[index] && (
                         <span className={styles.checkmark}>✔</span>
@@ -211,10 +217,16 @@ const DashboardPage = () => {
                     </div>
                   </div>
                   <p>{task.title}</p>
-                  <button onClick={() => handleEditTask(index)}>
+                  <button
+                    onClick={() => handleEditTask(index)}
+                    data-testid="editButton"
+                  >
                     <Image src={editItem} alt="Editar" width={24} height={24} />
                   </button>
-                  <button onClick={() => handleDeleteTask(index)}>
+                  <button
+                    onClick={() => handleDeleteTask(index)}
+                    data-testid="excluirButton" // Garantir que o botão tem o data-testid correto
+                  >
                     <Image
                       src={deleteItem}
                       alt="Excluir"

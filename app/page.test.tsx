@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import LoginPage from "./page";
 import { login } from "./services/authService";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 jest.mock("./services/authService");
 jest.mock("next/navigation");
@@ -73,7 +74,7 @@ describe("Login", () => {
     useRouter.mockReturnValue({ push: mockPush });
 
     // Mock do usePathname para evitar o erro de undefined
-    require("next/navigation").usePathname.mockReturnValue("/");
+    usePathname.mockReturnValue("/");
 
     render(<LoginPage />);
 

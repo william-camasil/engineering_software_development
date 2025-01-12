@@ -101,116 +101,136 @@ describe("DashboardPage", () => {
     screen.getByText("New Task");
   });
 
-  // it("edita uma tarefa corretamente", async () => {
-  //   const mockTasks = [
-  //     {
-  //       id: 1,
-  //       title: "Task 1",
-  //       description: "Description 1",
-  //       status_id: 1,
-  //       created_at: "",
-  //       updated_at: "",
-  //       deleted_at: null,
-  //       user_id: 1,
-  //     },
-  //   ];
-  //   (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
-  //   (tasksService.editTask as jest.Mock).mockResolvedValue({
-  //     id: 1,
-  //     title: "Edited Task",
-  //     description: "Edited Description",
-  //     status_id: 1,
-  //     created_at: "",
-  //     updated_at: "",
-  //     deleted_at: null,
-  //     user_id: 1,
-  //   });
+  it("edita uma tarefa corretamente", async () => {
+    const mockTasks = [
+      {
+        id: 1,
+        title: "Task 1",
+        description: "Description 1",
+        status_id: 1,
+        created_at: "",
+        updated_at: "",
+        deleted_at: null,
+        user_id: 1,
+      },
+    ];
 
-  //   // Renderiza o componente
-  //   render(<DashboardPage />);
+    // Mock da função obtainTasks para retornar tarefas existentes
+    (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
 
-  //   // Simula a edição da tarefa
-  //   const editButton = screen.getByAltText("Editar");
-  //   fireEvent.click(editButton);
+    // Mock da função editTask para retornar uma tarefa editada
+    (tasksService.editTask as jest.Mock).mockResolvedValue({
+      id: 1,
+      title: "Edited Task",
+      description: "Edited Description",
+      status_id: 1,
+      created_at: "",
+      updated_at: "",
+      deleted_at: null,
+      user_id: 1,
+    });
 
-  //   const input = screen.getByPlaceholderText("Adicione uma nova tarefa");
-  //   fireEvent.change(input, { target: { value: "Edited Task" } });
+    // Renderiza o componente
+    render(<DashboardPage />);
 
-  //   const saveButton = screen.getByText("Salvar");
-  //   fireEvent.click(saveButton);
+    // Espera que a tarefa seja carregada na tela
+    await waitFor(() => screen.getByText("Task 1"));
 
-  //   // Espera pela tarefa ser editada
-  //   await waitFor(() => screen.getByText("Edited Task"));
+    // Simula a edição da tarefa
+    const editButton = screen.getByTestId("editButton");
+    fireEvent.click(editButton);
 
-  //   // Verifica se a tarefa editada está na lista
-  //   screen.getByText("Edited Task");
-  // });
+    const input = screen.getByPlaceholderText("Adicione uma nova tarefa");
+    fireEvent.change(input, { target: { value: "Edited Task" } });
 
-  // it("marca uma tarefa como concluída", async () => {
-  //   const mockTasks = [
-  //     {
-  //       id: 1,
-  //       title: "Task 1",
-  //       description: "Description 1",
-  //       status_id: 1,
-  //       created_at: "",
-  //       updated_at: "",
-  //       deleted_at: null,
-  //       user_id: 1,
-  //     },
-  //   ];
-  //   (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
-  //   (tasksService.editTaskStatus as jest.Mock).mockResolvedValue({
-  //     id: 1,
-  //     title: "Task 1",
-  //     description: "Description 1",
-  //     status_id: 2,
-  //     created_at: "",
-  //     updated_at: "",
-  //     deleted_at: null,
-  //     user_id: 1,
-  //   });
+    const saveButton = screen.getByText("Salvar");
+    fireEvent.click(saveButton);
 
-  //   // Renderiza o componente
-  //   render(<DashboardPage />);
+    // Espera pela tarefa ser editada
+    await waitFor(() => screen.getByText("Edited Task"));
 
-  //   // Simula marcar a tarefa como concluída
-  //   const checkbox = screen.getByRole("checkbox");
-  //   fireEvent.click(checkbox);
+    // Verifica se a tarefa editada está na lista
+    screen.getByText("Edited Task");
+  });
 
-  //   // Espera a tarefa ser marcada como concluída
-  //   await waitFor(() => screen.getByText("Task 1"));
+  it("marca uma tarefa como concluída", async () => {
+    const mockTasks = [
+      {
+        id: 1,
+        title: "Task 1",
+        description: "Description 1",
+        status_id: 1,
+        created_at: "",
+        updated_at: "",
+        deleted_at: null,
+        user_id: 1,
+      },
+    ];
 
-  //   // Verifica se a tarefa foi concluída
-  //   screen.getByText("Task 1");
-  // });
+    // Mock da função obtainTasks para retornar tarefas existentes
+    (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
 
-  // it("deleta uma tarefa corretamente", async () => {
-  //   const mockTasks = [
-  //     {
-  //       id: 1,
-  //       title: "Task 1",
-  //       description: "Description 1",
-  //       status_id: 1,
-  //       created_at: "",
-  //       updated_at: "",
-  //       deleted_at: null,
-  //       user_id: 1,
-  //     },
-  //   ];
-  //   (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
-  //   (tasksService.deleteTask as jest.Mock).mockResolvedValue(undefined);
+    // Mock da função editTaskStatus para marcar a tarefa como concluída
+    (tasksService.editTaskStatus as jest.Mock).mockResolvedValue({
+      id: 1,
+      title: "Task 1",
+      description: "Description 1",
+      status_id: 2,
+      created_at: "",
+      updated_at: "",
+      deleted_at: null,
+      user_id: 1,
+    });
 
-  //   // Renderiza o componente
-  //   render(<DashboardPage />);
+    // Renderiza o componente
+    render(<DashboardPage />);
 
-  //   // Simula a exclusão de uma tarefa
-  //   const deleteButton = screen.getByAltText("Excluir");
-  //   fireEvent.click(deleteButton);
+    // Espera que a tarefa seja carregada na tela
+    await waitFor(() => screen.getByText("Task 1"));
 
-  //   // Espera a tarefa ser removida da lista
-  //   await waitFor(() => expect(screen.queryByText("Task 1")).toBeNull());
-  // });
+    // Simula marcar a tarefa como concluída (checkbox)
+    const checkbox = screen.getByRole("checkbox");
+    fireEvent.click(checkbox);
+
+    // Espera pela tarefa ser marcada como concluída
+    await waitFor(() => screen.getByText("Task 1"));
+
+    // Verifica se a tarefa foi concluída
+    expect(screen.getByText("Task 1")).toBeInTheDocument();
+  });
+
+  it("deleta uma tarefa corretamente", async () => {
+    const mockTasks = [
+      {
+        id: 1,
+        title: "Task 1",
+        description: "Description 1",
+        status_id: 1,
+        created_at: "",
+        updated_at: "",
+        deleted_at: null,
+        user_id: 1,
+      },
+    ];
+    (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
+    (tasksService.deleteTask as jest.Mock).mockResolvedValue(undefined);
+
+    // Renderiza o componente
+    render(<DashboardPage />);
+
+    // Espera que a tarefa seja carregada na tela
+    await waitFor(() => screen.getByText("Task 1"));
+
+    // Verifica se o botão de excluir está presente
+    const deleteButton = screen.getByTestId("excluirButton");
+    expect(deleteButton).toBeInTheDocument(); // Assegura que o botão de exclusão foi renderizado
+
+    // Simula a exclusão de uma tarefa
+    fireEvent.click(deleteButton);
+
+    // Espera a tarefa ser removida da lista
+    await waitFor(() => expect(screen.queryByText("Task 1")).toBeNull());
+  });
 
   it("exibe erro ao tentar criar uma tarefa", async () => {
     const mockTasks = [
@@ -240,7 +260,9 @@ describe("DashboardPage", () => {
     fireEvent.click(button);
 
     // Verifica se a mensagem de erro é exibida
-    await waitFor(() => screen.getByText("Erro ao criar tarefa."));
+    await waitFor(() =>
+      screen.getByText("Erro ao criar tarefa. Error: Erro ao criar tarefa")
+    );
   });
 
   it("exibe a mensagem de erro caso a requisição falhe", async () => {
@@ -254,7 +276,9 @@ describe("DashboardPage", () => {
 
     // Verifica se o estado de erro é exibido
     await waitFor(() =>
-      screen.getByText("Erro ao carregar os dados. Tente novamente.")
+      screen.getByText(
+        "Erro ao carregar os dados. Tente novamente. Error: Erro ao carregar os dados"
+      )
     );
   });
 
@@ -271,14 +295,16 @@ describe("DashboardPage", () => {
     screen.getByText("Carregando...");
   });
 
-  // it("exibe a mensagem 'Nenhum dado encontrado' se não houver dados", async () => {
-  //   // Mock da função `obtainTasks` para retornar um array vazio
-  //   (tasksService.obtainTasks as jest.Mock).mockResolvedValue([]);
+  it("exibe a mensagem 'Você ainda não tem tarefas cadastradas' se não houver dados", async () => {
+    // Mock da função `obtainTasks` para retornar um array vazio
+    (tasksService.obtainTasks as jest.Mock).mockResolvedValue([]);
 
-  //   // Renderiza o componente
-  //   render(<DashboardPage />);
+    // Renderiza o componente
+    render(<DashboardPage />);
 
-  //   // Verifica se a mensagem 'Nenhum dado encontrado' é exibida
-  //   await waitFor(() => screen.getByText("Nenhum dado encontrado."));
-  // });
+    // Verifica se a mensagem 'Você ainda não tem tarefas cadastradas' é exibida
+    await waitFor(() =>
+      screen.getByText("Você ainda não tem tarefas cadastradas")
+    );
+  });
 });

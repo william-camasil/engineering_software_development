@@ -2,7 +2,7 @@
   "tasks": [
     {
       "title": "Tarefa 1",
-      "id": 1,
+      "id": "1",
       "status_id": 2,
       "created_at": "2025-01-03T21:48:21.178702",
       "deleted_at": null,
@@ -11,18 +11,8 @@
       "updated_at": "2025-01-03T21:48:21.178702"
     },
     {
-      "title": "Tarefa 3",
-      "id": 3,
-      "status_id": 1,
-      "created_at": "2025-01-03T21:48:21.178702",
-      "deleted_at": null,
-      "description": "Must miss sense art key process light.",
-      "user_id": 2,
-      "updated_at": "2025-01-03T21:48:21.178702"
-    },
-    {
       "title": "Tarefa 4",
-      "id": 4,
+      "id": "4",
       "status_id": 1,
       "created_at": "2025-01-03T21:48:21.178702",
       "deleted_at": null,
@@ -32,7 +22,7 @@
     },
     {
       "title": "Tarefa 5",
-      "id": 5,
+      "id": "5",
       "status_id": 1,
       "created_at": "2025-01-03T21:48:21.178702",
       "deleted_at": null,
@@ -42,7 +32,7 @@
     },
     {
       "title": "Tarefa 6",
-      "id": 6,
+      "id": "6",
       "status_id": 1,
       "created_at": "2025-01-03T21:48:21.178702",
       "deleted_at": null,
@@ -51,7 +41,7 @@
       "updated_at": "2025-01-03T21:48:21.178702"
     },
     {
-      "id": 7,
+      "id": "7",
       "title": "Tarefa 7",
       "description": "Descrição padrão",
       "status_id": 1
