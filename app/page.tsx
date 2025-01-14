@@ -14,7 +14,12 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      const user = await login(email, password);
+
+      if (user && user.user_id) {
+        localStorage.setItem("user_id", user.user_id.toString());
+      }
+
       router.push("/dashboard");
     } catch (error) {
       alert(`Erro ao fazer login. Tente novamente. ${error}`);

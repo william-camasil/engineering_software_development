@@ -50,8 +50,6 @@ describe("RegisterPage", () => {
   it("should show an error alert if the registration fails", async () => {
     register.mockRejectedValueOnce(new Error("Registration failed"));
 
-    jest.spyOn(window, "alert").mockImplementation(() => {});
-
     render(<RegisterPage />);
 
     const emailInput = screen.getByPlaceholderText("Digite seu e-mail");
@@ -68,9 +66,9 @@ describe("RegisterPage", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(
-        "Erro ao registrar. Tente novamente. Error: Registration failed"
-      );
+      expect(
+        screen.getByText(/Erro ao registrar. Tente novamente./i)
+      ).toBeInTheDocument();
     });
   });
 });

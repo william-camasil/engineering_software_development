@@ -10,6 +10,20 @@ jest.mock("next/navigation", () => ({
   usePathname: jest.fn(),
 }));
 
+beforeEach(() => {
+  Object.defineProperty(window, "localStorage", {
+    value: {
+      getItem: jest.fn(() => "1"),
+    },
+    writable: true,
+  });
+
+  (tasksService.obtainTasks as jest.Mock).mockReset();
+  (tasksService.createTask as jest.Mock).mockReset();
+  (tasksService.editTask as jest.Mock).mockReset();
+  (tasksService.deleteTask as jest.Mock).mockReset();
+});
+
 describe("DashboardPage", () => {
   const mockData = [
     {
@@ -38,7 +52,6 @@ describe("DashboardPage", () => {
     (tasksService.obtainTasks as jest.Mock).mockReset();
     (tasksService.createTask as jest.Mock).mockReset();
     (tasksService.editTask as jest.Mock).mockReset();
-    (tasksService.editTaskStatus as jest.Mock).mockReset();
     (tasksService.deleteTask as jest.Mock).mockReset();
   });
 
@@ -50,8 +63,8 @@ describe("DashboardPage", () => {
     await waitFor(() => screen.getByText("Task 1"));
     await waitFor(() => screen.getByText("Task 2"));
 
-    screen.getByText("Task 1");
-    screen.getByText("Task 2");
+    expect(screen.getByText("Task 1")).toBeInTheDocument();
+    expect(screen.getByText("Task 2")).toBeInTheDocument();
   });
 
   it("adiciona uma nova tarefa com sucesso", async () => {
@@ -67,6 +80,7 @@ describe("DashboardPage", () => {
         user_id: 1,
       },
     ];
+
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
     (tasksService.createTask as jest.Mock).mockResolvedValue({
       id: 2,
@@ -88,7 +102,7 @@ describe("DashboardPage", () => {
 
     await waitFor(() => screen.getByText("New Task"));
 
-    screen.getByText("New Task");
+    expect(screen.getByText("New Task")).toBeInTheDocument();
   });
 
   it("edita uma tarefa corretamente", async () => {
@@ -106,7 +120,6 @@ describe("DashboardPage", () => {
     ];
 
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
-
     (tasksService.editTask as jest.Mock).mockResolvedValue({
       id: 1,
       title: "Edited Task",
@@ -133,7 +146,7 @@ describe("DashboardPage", () => {
 
     await waitFor(() => screen.getByText("Edited Task"));
 
-    screen.getByText("Edited Task");
+    expect(screen.getByText("Edited Task")).toBeInTheDocument();
   });
 
   it("marca uma tarefa como concluída", async () => {
@@ -151,8 +164,7 @@ describe("DashboardPage", () => {
     ];
 
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
-
-    (tasksService.editTaskStatus as jest.Mock).mockResolvedValue({
+    (tasksService.editTask as jest.Mock).mockResolvedValue({
       id: 1,
       title: "Task 1",
       description: "Description 1",
@@ -176,6 +188,8 @@ describe("DashboardPage", () => {
   });
 
   it("deleta uma tarefa corretamente", async () => {
+    window.confirm = jest.fn().mockReturnValue(true);
+  
     const mockTasks = [
       {
         id: 1,
@@ -188,21 +202,26 @@ describe("DashboardPage", () => {
         user_id: 1,
       },
     ];
+  
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
+  
     (tasksService.deleteTask as jest.Mock).mockResolvedValue(undefined);
-
+  
     render(<DashboardPage />);
-
+  
     await waitFor(() => screen.getByText("Task 1"));
-
+  
     const deleteButton = screen.getByTestId("excluirButton");
-    expect(deleteButton).toBeInTheDocument();
-
+  
     fireEvent.click(deleteButton);
-
-    await waitFor(() => expect(screen.queryByText("Task 1")).toBeNull());
-  });
-
+  
+    await waitFor(() => {
+      expect(screen.queryByText("Task 1")).toBeNull(); 
+    });
+  
+    expect(tasksService.deleteTask).toHaveBeenCalledWith(1); 
+  }); 
+  
   it("exibe erro ao tentar criar uma tarefa", async () => {
     const mockTasks = [
       {
@@ -216,6 +235,7 @@ describe("DashboardPage", () => {
         user_id: 1,
       },
     ];
+
     (tasksService.obtainTasks as jest.Mock).mockResolvedValue(mockTasks);
     (tasksService.createTask as jest.Mock).mockRejectedValue(
       new Error("Erro ao criar tarefa")
@@ -247,14 +267,14 @@ describe("DashboardPage", () => {
     );
   });
 
-  it("exibe a mensagem de carregamento enquanto a requisição está em andamento", () => {
+  it("exibe a mensagem de carregamento enquanto a requisição está em andamento", async () => {
     (tasksService.obtainTasks as jest.Mock).mockReturnValue(
       new Promise(() => {})
     );
 
     render(<DashboardPage />);
 
-    screen.getByText("Carregando...");
+    expect(screen.getByText("Carregando...")).toBeInTheDocument();
   });
 
   it("exibe a mensagem 'Você ainda não tem tarefas cadastradas' se não houver dados", async () => {

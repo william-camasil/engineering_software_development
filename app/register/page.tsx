@@ -11,14 +11,21 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
+  const [messageType, setMessageType] = useState<"success" | "error">(
+    "success"
+  );
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await register(email, password, confirmPassword);
+      setMessage("Usuário registrado com sucesso!");
+      setMessageType("success");
       router.push("/");
     } catch (error) {
-      alert(`Erro ao registrar. Tente novamente. ${error}`);
+      setMessage(`Erro ao registrar. Tente novamente. ${error}`);
+      setMessageType("error");
     }
   };
 
@@ -56,6 +63,16 @@ const RegisterPage = () => {
             Cadastrar
           </button>
         </form>
+
+        {message && (
+          <div
+            className={`${styles.message} ${
+              messageType === "success" ? styles.success : styles.error
+            }`}
+          >
+            {message}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -54,8 +54,6 @@
 
 .taskItem.completed {
   background-color: #e0dce4;
-  text-decoration: line-through;
-  color: #6c757d;
 }
 
 .stats {
@@ -103,12 +101,6 @@
   align-items: center;
 }
 
-.taskItem.completed {
-  background-color: #e0dce4;
-  text-decoration: line-through;
-  color: #6c757d;
-}
-
 .taskItem button {
   background-color: transparent;
   border: none;
@@ -152,8 +144,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   border: 2px solid #ccc;
   cursor: pointer;
@@ -167,9 +159,13 @@
   background-color: #4caf50;
 }
 
+.checkboxContainer:hover {
+  border-color: #32ade6;
+}
+
 .circle {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background-color: #fff;
   display: flex;
@@ -178,7 +174,21 @@
   transition: background-color 0.3s ease;
 }
 
+.checkboxContainer.checked .circle {
+  background-color: #4caf50;
+}
+
 .checkmark {
   color: white;
-  font-size: 16px;
+  font-size: 18px;
+  transition: opacity 0.3s ease;
+}
+
+.checkboxContainer input {
+  display: none;
+}
+
+.taskItem p.completed {
+  text-decoration: line-through;
+  color: #6c757d;
 }

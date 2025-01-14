@@ -11,7 +11,6 @@ import {
   obtainTasks,
   createTask,
   editTask,
-  editTaskStatus,
   deleteTask,
   TasksDataResponseType,
 } from "../services/tasksService";
@@ -32,8 +31,17 @@ const DashboardPage = () => {
   const handleObtainData = async () => {
     setLoading(true);
     setError(null);
+
+    const user_id = localStorage.getItem("user_id");
+
+    if (!user_id) {
+      setError("Usuário não encontrado. Realize o login novamente.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await obtainTasks();
+      const response = await obtainTasks(Number(user_id));
       setTasks(response);
 
       const updatedCompletedTasks = response.map(
@@ -49,19 +57,28 @@ const DashboardPage = () => {
 
   const handleAddTask = async () => {
     if (newTask.trim() !== "") {
+      const user_id = localStorage.getItem("user_id");
+
       try {
         const lastTaskId =
           tasks.length > 0 ? Math.max(...tasks.map((task) => task.id)) : 0;
 
         const nextId = lastTaskId + 1;
 
-        const task = await createTask(newTask, "Descrição padrão", nextId);
+        const task = await createTask(
+          newTask,
+          "Descrição padrão",
+          nextId,
+          Number(user_id)
+        );
 
-        setTasks((prevTasks) => [...prevTasks, task]);
+        setTasks((prevTasks) => [...prevTasks, { ...task, title: newTask }]);
+
         setCompletedTasks((prevCompletedTasks) => [
           ...prevCompletedTasks,
           false,
         ]);
+
         setNewTask("");
       } catch (error) {
         setError(`Erro ao criar tarefa. ${error}`);
@@ -80,9 +97,11 @@ const DashboardPage = () => {
 
     try {
       const taskId = tasks[index].id;
-      await editTaskStatus(
+      await editTask(
         taskId,
-        updatedTasks[index].status_id
+        updatedTasks[index].status_id,
+        newTask,
+        "Descrição editada"
       );
     } catch (error) {
       setError(`Erro ao atualizar o status da tarefa. ${error}`);
@@ -90,19 +109,27 @@ const DashboardPage = () => {
   };
 
   const handleDeleteTask = async (index: number) => {
-    try {
-      const taskId = tasks[index].id;
-      await deleteTask(taskId);
+    const confirmDelete = window.confirm(
+      "Você tem certeza que deseja excluir esta tarefa?"
+    );
 
-      const updatedTasks = [...tasks];
-      updatedTasks.splice(index, 1);
-      setTasks(updatedTasks);
+    if (confirmDelete) {
+      try {
+        const taskId = tasks[index].id;
+        await deleteTask(taskId);
 
-      const updatedCompletedTasks = [...completedTasks];
-      updatedCompletedTasks.splice(index, 1);
-      setCompletedTasks(updatedCompletedTasks);
-    } catch (error) {
-      setError(`Erro ao excluir tarefa. ${error}`);
+        const updatedTasks = [...tasks];
+        updatedTasks.splice(index, 1);
+        setTasks(updatedTasks);
+
+        const updatedCompletedTasks = [...completedTasks];
+        updatedCompletedTasks.splice(index, 1);
+        setCompletedTasks(updatedCompletedTasks);
+      } catch (error) {
+        setError(`Erro ao excluir tarefa. ${error}`);
+      }
+    } else {
+      return;
     }
   };
 
@@ -114,14 +141,19 @@ const DashboardPage = () => {
   const handleSaveTask = async () => {
     if (newTask.trim() !== "" && editingTaskIndex !== null) {
       try {
-        const updatedTask = await editTask(
-          tasks[editingTaskIndex].id,
+        const updatedTasks = [...tasks];
+        updatedTasks[editingTaskIndex].title = newTask;
+
+        setTasks(updatedTasks);
+
+        const taskId = tasks[editingTaskIndex].id;
+        await editTask(
+          taskId,
+          tasks[editingTaskIndex].status_id,
           newTask,
           "Descrição editada"
         );
-        const updatedTasks = [...tasks];
-        updatedTasks[editingTaskIndex] = updatedTask;
-        setTasks(updatedTasks);
+
         setNewTask("");
         setEditingTaskIndex(null);
       } catch (error) {
@@ -193,8 +225,8 @@ const DashboardPage = () => {
                 <div
                   key={index}
                   className={`${styles.taskItem} ${
-                    completedTasks[index] ? styles.completed : ""
-                  } ${editingTaskIndex === index ? styles.editing : ""}`}
+                    editingTaskIndex === index ? styles.editing : ""
+                  }`}
                 >
                   <div
                     className={`${styles.checkboxContainer} ${
@@ -214,7 +246,11 @@ const DashboardPage = () => {
                       )}
                     </div>
                   </div>
-                  <p>{task.title}</p>
+
+                  <p className={completedTasks[index] ? styles.completed : ""}>
+                    {task.title}
+                  </p>
+
                   <button
                     onClick={() => handleEditTask(index)}
                     data-testid="editButton"
