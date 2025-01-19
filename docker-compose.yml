@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  nextjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Porta para o servidor Next.js
+      - "5000:5000" # Porta para o json-server
+    volumes:
+      - .:/app # Permitir hot reload no desenvolvimento
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+    command: npm run dev # Iniciar em modo desenvolvimento
