@@ -22,13 +22,13 @@ Após rodar o comando acima, abra o link exibido no terminal para acessar o proj
 
 http://localhost:3000
 
-### 2. Rodar os Testes
+### 3. Rodar os Testes
 
 ```bash
 npm test
 ```
 
-### 2. Rodar o Lint
+### 4. Rodar o Lint
 
 ```bash
 npm run lint
