@@ -72,7 +72,10 @@ const DashboardPage = () => {
           Number(user_id)
         );
 
-        setTasks((prevTasks) => [...prevTasks, { ...task, title: newTask }]);
+        setTasks((prevTasks) => [
+          ...prevTasks,
+          { ...task, title: newTask, status_id: 1 },
+        ]);
 
         setCompletedTasks((prevCompletedTasks) => [
           ...prevCompletedTasks,
@@ -80,6 +83,8 @@ const DashboardPage = () => {
         ]);
 
         setNewTask("");
+
+        window.location.reload();
       } catch (error) {
         setError(`Erro ao criar tarefa. ${error}`);
       }
@@ -92,7 +97,7 @@ const DashboardPage = () => {
     setCompletedTasks(updatedCompletedTasks);
 
     const updatedTasks = [...tasks];
-    updatedTasks[index].status_id = updatedCompletedTasks[index] ? 2 : 1;
+    updatedTasks[index].status_id = updatedCompletedTasks[index] ? 2 : 1; // Atualizando o status_id
     setTasks(updatedTasks);
 
     try {

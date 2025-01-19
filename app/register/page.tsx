@@ -18,6 +18,19 @@ const RegisterPage = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (password.length < 8) {
+      setMessage("A senha deve ter pelo menos 8 caracteres.");
+      setMessageType("error");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setMessage("As senhas não coincidem.");
+      setMessageType("error");
+      return;
+    }
+
     try {
       await register(email, password, confirmPassword);
       setMessage("Usuário registrado com sucesso!");
@@ -58,7 +71,6 @@ const RegisterPage = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-
           <button type="submit" className={styles.loginButton}>
             Cadastrar
           </button>
